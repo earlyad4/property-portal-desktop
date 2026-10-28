@@ -1,0 +1,74 @@
+{
+  "name": "property-portal-desktop",
+  "version": "1.0.0",
+  "description": "PropertyPortal property operations desktop application",
+  "author": "Property Portal Contributors",
+  "private": true,
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "concurrently -k \"npm run dev:renderer\" \"npm run dev:electron\"",
+    "dev:renderer": "vite",
+    "dev:electron": "wait-on tcp:5173 && electron .",
+    "validate:release": "node scripts/validate-release-config.mjs",
+    "build": "npm run validate:release && vite build",
+    "build:renderer:dev": "vite build",
+    "dist:windows": "npm run build && electron-builder --win nsis --x64 --publish never",
+    "preview": "vite preview",
+    "start": "electron ."
+  },
+  "dependencies": {
+    "keytar": "^7.9.0",
+    "react": "19.2.5",
+    "react-dom": "19.2.5",
+    "recharts": "^2.15.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "6.0.1",
+    "concurrently": "9.2.1",
+    "electron": "41.2.1",
+    "electron-builder": "^26.0.12",
+    "vite": "8.0.8",
+    "wait-on": "9.0.5"
+  },
+  "optionalDependencies": {},
+  "build": {
+    "appId": "org.example.propertyportal.desktop",
+    "productName": "PropertyPortal",
+    "artifactName": "PropertyPortal-${version}-${arch}-Setup.${ext}",
+    "asar": true,
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release/windows"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "deleteAppDataOnUninstall": false
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/earlyad4/property-portal-desktop.git"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
